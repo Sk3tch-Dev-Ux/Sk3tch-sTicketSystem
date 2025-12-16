@@ -1,0 +1,22 @@
+# Fly.io configuration for Discord Ticket Bot
+app = "your-app-name"  # Change this to your Fly app name
+primary_region = "ord"  # Change to your preferred region
+
+[build]
+  dockerfile = "Dockerfile"
+
+# No HTTP service needed - this is a Discord bot, not a web server
+# Discord bots use WebSocket connections, not HTTP
+
+[env]
+  NODE_ENV = "production"
+
+# Set secrets via CLI (don't put actual values here):
+# flyctl secrets set DISCORD_TOKEN=your_token
+# flyctl secrets set MONGODB_URI=your_mongodb_uri
+# flyctl secrets set CLIENT_ID=your_client_id
+# flyctl secrets set GUILD_ID=your_guild_id  (optional)
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
