@@ -46,21 +46,25 @@ process.on('uncaughtException', error => {
 
 // Connect to MongoDB and start bot
 async function start() {
-    try {
-        console.log('🔌 Connecting to MongoDB...');
-        await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log('✅ Connected to MongoDB');
+  try {
+    const mongoUri = process.env.MONGO_URI;
 
-        console.log('🤖 Starting Discord bot...');
-        await client.login(process.env.DISCORD_TOKEN);
-    } catch (error) {
-        console.error('❌ Failed to start:', error);
-        process.exit(1);
+    if (!mongoUri || !mongoUri.startsWith("mongodb")) {
+      throw new Error(`Invalid or missing MONGO_URI: ${mongoUri}`);
     }
+
+    console.log("🔌 Connecting to MongoDB...");
+    await mongoose.connect(mongoUri);
+    console.log("✅ Connected to MongoDB");
+
+    console.log("🤖 Starting Discord bot...");
+    await client.login(process.env.DISCORD_TOKEN);
+  } catch (error) {
+    console.error("❌ Failed to start:", error);
+    process.exit(1);
+  }
 }
+
 
 start();
 
